@@ -1,16 +1,17 @@
 #include <windows.h>
 #include <fstream>
 #include "nya_commonhooklib.h"
+
+#include "fo2.h"
 #include "../nya-common-fouc/fo2versioncheck.h"
 
-auto lua_tolstring = (const char*(*)(void*, int, void*))0x5B4400;
 void* LogLUAErr(void* a1, int a2, void* a3) {
-	MessageBoxA(nullptr, lua_tolstring(a1, a2, a3), "Runtime error", 0x10);
+	MessageBoxA(nullptr, (const char*)lua_tolstring(a1, a2, a3), "Runtime error", 0x10);
 	exit(0);
 }
 
 void* LogLUALoadErr(void* a1, int a2, void* a3) {
-	MessageBoxA(nullptr, lua_tolstring(a1, a2, a3), "Load error", 0x10);
+	MessageBoxA(nullptr, (const char*)lua_tolstring(a1, a2, a3), "Load error", 0x10);
 	exit(0);
 }
 
