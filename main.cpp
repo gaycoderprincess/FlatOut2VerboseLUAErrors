@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <fstream>
 #include "nya_commonhooklib.h"
+#include "../nya-common-fouc/fo2versioncheck.h"
 
 auto lua_tolstring = (const char*(*)(void*, int, void*))0x5B4400;
 void* LogLUAErr(void* a1, int a2, void* a3) {
@@ -16,12 +17,7 @@ void* LogLUALoadErr(void* a1, int a2, void* a3) {
 BOOL WINAPI DllMain(HINSTANCE, DWORD fdwReason, LPVOID) {
 	switch( fdwReason ) {
 		case DLL_PROCESS_ATTACH: {
-			if (NyaHookLib::GetEntryPoint() != 0x202638) {
-				MessageBoxA(nullptr, "Unsupported game version! Make sure you're using DRM-free v1.2 (.exe size of 2990080 bytes)", "nya?!~", MB_ICONERROR);
-				exit(0);
-				return TRUE;
-			}
-
+			DoFlatOutVersionCheck(FO2Version::FO2_1_2);
 			NyaHookLib::PatchRelative(NyaHookLib::CALL, 0x525727, &LogLUAErr);
 			NyaHookLib::PatchRelative(NyaHookLib::CALL, 0x5240C6, &LogLUALoadErr);
 			NyaHookLib::PatchRelative(NyaHookLib::CALL, 0x524218, &LogLUALoadErr);
